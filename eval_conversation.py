@@ -331,21 +331,6 @@ def main(args: argparse.Namespace):
         row['sisdri_interfer'] = si_sdr_i(est=output_target, gt=interfer, mix=mixture[0:1]).item()
         row['sisdri_other'] = si_sdr_i(est=output_target, gt=targets["other"], mix=mixture[0:1]).item()
         
-        # gt_all = np.concatenate([targets["self"], targets["other"], interfer], axis = 0)
-        # mix_all = np.concatenate([mixture[0:1], mixture[0:1], mixture[0:1]], axis = 0)
-        # out_all = np.concatenate([output_target, output_target, output_target], axis = 0)
-        
-        # gt_all = np.concatenate([ targets["other"], interfer], axis = 0)
-        # mix_all = np.concatenate([ mixture[0:1], mixture[0:1]], axis = 0)
-        # out_all = np.concatenate([ output_target, output_target], axis = 0)
-
-        # sdr0, sir0, sar0, _ = mir_eval.separation.bss_eval_sources(reference_sources = gt_all, estimated_sources = mix_all, compute_permutation = False)
-        # sdr1, sir1, sar1, _ = mir_eval.separation.bss_eval_sources(reference_sources = gt_all, estimated_sources = out_all, compute_permutation = False)
-        # delta_sir = sir1 - sir0
-        # print(delta_sir)
-        # row["sir_in"] = sir0
-        # row["sir_out"] = sir1
-        # print()
         tse_dataset[metadata["interfer_name"]].append(row['sisdri_target'])
         diag_info = metadata["diag_info"]
         
@@ -392,26 +377,8 @@ def main(args: argparse.Namespace):
     results_df = pd.DataFrame.from_records(records)
     
     # Save DataFrame
-    results_csv_path = f'./output/result_{model_name}.csv' #f'./output/result_{model_name}.csv'
+    results_csv_path = f'./output/result_{model_name}.csv' 
     results_df.to_csv(results_csv_path)
-
-    # Create DataFrame from records
-    # results_df = pd.DataFrame.from_records(records)
-    # plt.figure() 
-    # plt.scatter(x1, y)
-    # plt.savefig("./debug/overlap.png")
-    # plt.figure() 
-    # plt.scatter(x2, y)
-    # plt.savefig("./debug/self_duration.png")
-
-    # # Save DataFrame
-    # results_csv_path = os.path.join(args.output_dir, 'results.csv')
-    # results_df.to_csv(results_csv_path)
-
-    # # Save arguments to this script
-    # args_path = os.path.join(args.output_dir, 'args.json')
-    # with open(args_path, 'w') as f:
-    #     json.dump(args.__dict__, f, indent=4)
 
 
 if __name__ == "__main__":

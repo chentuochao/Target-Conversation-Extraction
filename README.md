@@ -37,6 +37,8 @@ python convert_AMI2Libri.py --data_dir /scr/Noreverb_ASR/ --save_dir /scr/ASR_Li
 python convert_ASR2aishell1.py --data_dir /scr/Noreverb_ASR --save_dir /scr/ASR2AISHELL --replace_prob 0.5
 ```
 
+The generated dataset will be soon avaliable in Zenodo....
+
 ## Model Prepare
 <p align="center">
 <img src="image/arch.png" width="600">
@@ -62,12 +64,16 @@ python src/train.py --config ./experiment/finetune_Mandarain.json --run_dir $CHE
 ## Model evaluation
 Evaluate on the English conversation
 ```
-tar 
 python eval_conversation.py ./Noreverb_AMI/test/ $CHECKPOINT_FOLDER_ENG --use_cuda
 ```
 
 Evaluate on the Mandarain conversation
 ```
-tar 
 python eval_conversation.py ./Noreverb_ASR/test/ $CHECKPOINT_FOLDER_MND --use_cuda
+```
+
+The evaluation script will output sample-wise result as csv file and save to folder "./output". 
+To do analysis on the output cvf files, run 
+```
+python plot_result.py $CVS_FILE_PATH
 ```
