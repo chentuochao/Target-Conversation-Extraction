@@ -20,39 +20,6 @@ def save_audio_file_torch(file_path, wavform, sample_rate = 48000, rescale = Tru
         wavform = wavform/torch.max(wavform)*0.9
     torchaudio.save(file_path, wavform, sample_rate)
 
-def visualize(gt, target, label_gt, label_out, save_folder):
-    print("drawing")
-    CHUNK = int(0.24*16000)
-    plt.figure(figsize=(10, 5))
-    # plt.plot( gt[0])
-    self_label = label_gt[0]
-    for i in range (self_label.shape[0]):
-        if self_label[i] > 0:
-            plt.plot([i*CHUNK,(i+1)*CHUNK], [0.15, 0.15], color = "red")
-    self_label = label_out[0]
-    # print(self_label)
-    for i in range (self_label.shape[0]):
-        if self_label[i] > 0:
-            plt.plot([i*CHUNK,(i+1)*CHUNK], [0.2, 0.2], color = "green")
-
-    plt.ylim([-1, 1])
-    # plt.plot( target, label='WAV Signal2')
-    other_label = label_gt[1]
-    for i in range (other_label.shape[0]):
-        if other_label[i] > 0:
-            plt.plot([i*CHUNK,(i+1)*CHUNK], [-0.15, -0.15], color = "red")
-    other_label = label_out[1]
-    for i in range (other_label.shape[0]):
-        if other_label[i] > 0:
-            plt.plot([i*CHUNK,(i+1)*CHUNK], [-0.2, -0.2], color = "green")
-            
-    plt.ylim([-1, 1])
-    print("saing")
-    plt.savefig(save_folder + "/label.png")
-    plt.close()
-
-
-
 def overlap_duration_check(self_speaker, others, shift = 1):
     L_total = 16000*60
     self_time = self_speaker["timestamp"]
@@ -132,125 +99,7 @@ def calculate_cosine_similarity(vector1, vector2):
     return similarity[0, 0]
 
 
-
-
-def pertube_gt2(gt, speaker):
-    L_total = 16000*60
-
-    gt_new = torch.zeros_like(gt)
-
-    self_time = speaker["timestamp"]
-    self_time_new = []
-
-    # sorted_list = sorted(timestamps, key=lambda x: x[0])
-    # _id = 0
-    # num_self = 0# len(self_time)
-    # for i in range(len(sorted_list)):
-    #     if num_self >= len(self_time):
-    #         break
-
-    #     len_sig =  self_time[num_self][1] - self_time[num_self][0]
-    #     gt_new[:, sorted_list[i][0] : sorted_list[i][0] + len_sig] = gt[:, self_time[num_self][0] : self_time[num_self][1]]
-    #     self_time_new.append([sorted_list[i][0] , sorted_list[i][0] + len_sig])
-    #     num_self = num_self + 1
-    #     _id = sorted_list[i][0] + len_sig
-    
-    for b, e in self_time:
-        gap = np.random.randint(low = -8000, high = 16000)
-        if b + gap < 0:
-            gap = -b
-        if gap + e > gt.shape[-1]:
-            gap = gt.shape[-1] - e
-        gt_new[:, b + gap : gap + e] = gt[:, b:e]
-        self_time_new.append([b + gap, gap + e])
-
-    return gt_new, self_time_new
-
-def pertube_gt(gt, speaker):
-    L_total = 16000*60
-
-    gt_new = torch.zeros_like(gt)
-
-    self_time = speaker["timestamp"]
-    self_time_new = []
-
-    # sorted_list = sorted(timestamps, key=lambda x: x[0])
-    # _id = 0
-    # num_self = 0# len(self_time)
-    # for i in range(len(sorted_list)):
-    #     if num_self >= len(self_time):
-    #         break
-
-    #     len_sig =  self_time[num_self][1] - self_time[num_self][0]
-    #     gt_new[:, sorted_list[i][0] : sorted_list[i][0] + len_sig] = gt[:, self_time[num_self][0] : self_time[num_self][1]]
-    #     self_time_new.append([sorted_list[i][0] , sorted_list[i][0] + len_sig])
-    #     num_self = num_self + 1
-    #     _id = sorted_list[i][0] + len_sig
-    _id = 0
-    
-    for b, e in self_time:
-        gt_new[:, _id : _id + (e - b)] = gt[:, b:e]
-        _id = _id + (e - b)
-        self_time_new.append([_id, _id + (e - b)])
-
-    return gt_new, self_time_new
-
-
-
-def moving_left(wav):
-    times = librosa.effects.split(wav, top_db=40)
-    out = torch.zeros_like(wav)
-    index = 0
-    new_times = []
-    for b, e in times:
-        out[:, index:index + (e - b)] =  wav[:, b:e]
-        new_times.append([index, index + (e - b)])
-        index = index + (e - b)
-    return out,new_times
-
-
-def random_shift0(wav, SHIFT):
-    times = librosa.effects.split(wav, top_db=30)
-    out = torch.zeros_like(wav)
-    new_time = []
-    for b, e in times:
-        low_new = max([0, b - SHIFT])
-        high_new = min([out.shape[-1] - (e- b), b + SHIFT])
-        new_b = np.random.randint(low = low_new, high = high_new)
-        # print(new_b , new_b + (e-b), out.shape)
-        out[:, new_b : new_b + (e-b)] =  wav[:, b:e]
-    return out
-
-
-
-
-def random_shift(wav, times, SHIFT):
-    new_time = []
-    out = torch.zeros_like(wav)
-    for b, e in times:
-        low_new = max([0, b - SHIFT])
-        high_new = min([out.shape[-1] - (e- b), b + SHIFT])
-        new_b = np.random.randint(low = low_new, high = high_new)
-        # print(new_b , new_b + (e-b), out.shape)
-        out[:, new_b : new_b + (e-b)] =  wav[:, b:e]
-        new_time.append([new_b, new_b + (e-b)])
-    # print(times, new)
-    return out, new_time
-
-
-def zero_out(wav, other):
-    wav_new = torch.zeros_like(wav)
-
-    for b, e in other["timestamp"]:
-        wav_new[:, b:e] = wav[:, b:e]
-    return wav_new
-
-def process_interference(wav, interfers):
-    interf = np.random.choice(interfers)
-    wav = zero_out(wav, interf)
-    return wav, interf
-
-def get_mixture_and_gt(curr_dir, SHIFT_VALUE = 0, noise_dir = None):
+def get_mixture_and_gt(curr_dir, SHIFT_VALUE = 0):
     
     metadata2 = utils.read_json(os.path.join(curr_dir, 'metadata.json'))
     # print("reverb0", reverb0)
@@ -268,26 +117,11 @@ def get_mixture_and_gt(curr_dir, SHIFT_VALUE = 0, noise_dir = None):
         other_label = None
         label_gt = None
     
-
-    
     self_speech = utils.read_audio_file_torch(os.path.join(curr_dir, 'self_speech.wav'), 1)
-    if SHIFT_VALUE > 0:
-        # self_speech, time_new = random_shift(self_speech, diags[0]["timestamp"], 16000*SHIFT_VALUE)
-        self_speech,time_new = moving_left(self_speech)
-        diags[0]["timestamp"] = time_new
-    # self_speech, self_time_new = pertube_gt(self_speech, diags[0])
-    # interfer = utils.read_audio_file_torch(os.path.join(curr_dir, 'intereference.wav'), 1)
-    # interfer = zero_out(interfer, )
 
     other_speech = torch.zeros_like(self_speech)
     for i in range(len(diags) - 1):
         wav = utils.read_audio_file_torch(os.path.join(curr_dir, f'target_speech{i}.wav'), 1)
-        # wav, time_new = pertube_gt(wav, diags[i + 1])
-        # 
-        if SHIFT_VALUE > 0:
-            # wav, time_new = random_shift(wav, diags[i + 1]["timestamp"], 16000*SHIFT_VALUE)
-            wav, time_new = moving_left(wav)
-            diags[i + 1]["timestamp"] = time_new
         other_speech += wav
 
 
@@ -297,27 +131,15 @@ def get_mixture_and_gt(curr_dir, SHIFT_VALUE = 0, noise_dir = None):
         interfers = metadata2["interference"]
         interfere = torch.zeros_like(self_speech)
         Num_inter = len(interfers)
-        # if len(interfers) > 2:
-        #     Num_inter = 3
+
         for i in range(0, Num_inter):
             interfere += utils.read_audio_file_torch(os.path.join(curr_dir, f'intereference{i}.wav'), 1)
-    
-    if noise_dir is not None:
-        print(curr_dir)
-        noise_splits = str(curr_dir).split('/')
-        noise_dir = os.path.join(noise_dir, noise_splits[3], noise_splits[4])          
-        # print(noise_dir)  
-        BG = np.random.uniform(low = 0.5, high = 1.6 ) * utils.read_audio_file_torch(os.path.join(noise_dir, 'BG.wav'), 1)
-        interfere += BG
 
     overlap = overlap_duration_check(diags[0], diags[1:])
     if "diag_info" not in metadata2.keys():
         metadata2["diag_info"] = {}
         metadata2["target_name"], metadata2["interfer_name"] = "xxx", "xxx"
     
-    # interfere, inter_info = process_interference(interfere, metadata2["interference"])
-    # metadata2["interference"] = [inter_info]
-
     interfer_overlap = []
     for interf in metadata2["interference"]:
         overlap1 = overlap_duration_check(diags[0], [interf])
@@ -327,18 +149,13 @@ def get_mixture_and_gt(curr_dir, SHIFT_VALUE = 0, noise_dir = None):
     metadata2["diag_info"]["overlap_ratio_inter"] = interfer_overlap[0]
     aug_id = 0
     # print("reverb1", reverb1)
-    reverb_path = os.path.join(curr_dir, f'embed_aug{aug_id}.pt')
-    if os.path.exists(reverb_path):
-        reverb_path = os.path.join(curr_dir, f'embed_aug{aug_id}.pt')
-        example_wav = utils.read_audio_file_torch(os.path.join(curr_dir, f'example_aug{aug_id}.wav'), 1)
-    else:
-        reverb_path = os.path.join(curr_dir, f'embed.pt')
-        example_wav = utils.read_audio_file_torch(os.path.join(curr_dir, f'example.wav'), 1)
+    reverb_path = os.path.join(curr_dir, f'embed.pt')
+    example_wav = utils.read_audio_file_torch(os.path.join(curr_dir, f'example.wav'), 1)
 
 
     L = example_wav.shape[-1]
 
-    scale = 0.75#0.7 - AMI 0.75-ASR
+    scale = 0.75
     other_speech = other_speech*scale
     self_speech = self_speech*scale
     gt = self_speech + other_speech
@@ -459,7 +276,7 @@ def main(args: argparse.Namespace):
         "xxx": []
     }
     bad_spk = []
-    save_dir = [5, 6, 8, 9, 10, 14]
+    save_dir = [ 52, 68, 87] #[2, 5, 8, 10, 12, 17, 25, 28, 63, 94]
     x1 = []
     x2 = []
     y = []
@@ -467,7 +284,7 @@ def main(args: argparse.Namespace):
     overlaps2 = []
     sisdris4 = []
 
-    for i in range(0, 1000):
+    for i in range(0, 100):
         # print(f"Sample: {i} ----------")
         
         # curr_dir = os.path.join(args.test_dir, "{:05d}".format(i))
@@ -475,7 +292,7 @@ def main(args: argparse.Namespace):
         embed_dir = os.path.join(curr_dir, "embed.pt")
         if not os.path.exists(embed_dir):
             continue
-        inputs, targets, metadata, example_wav, interfer = get_mixture_and_gt(curr_dir, SHIFT_VALUE = args.shift, noise_dir=args.noise_dir)
+        inputs, targets, metadata, example_wav, interfer = get_mixture_and_gt(curr_dir, SHIFT_VALUE = args.shift)
         if metadata["interfer_name"] != metadata["target_name"]:
             continue
         # Run inference
@@ -552,11 +369,8 @@ def main(args: argparse.Namespace):
         
         if i in save_dir:
             bad_spk.append(metadata["target_dialogue"][0]["spk_id"])
-            save_folder = f"./debug/{i}"
+            save_folder = f"../TCE_samples2/{i}"
             os.makedirs(save_folder, exist_ok=True)
-            if output_label is not None:
-                visualize(targets["self"], targets["other"], label_gt, output_label, save_folder)
-            
             save_audio_file_torch(f"{save_folder}/mix.wav", torch.from_numpy(mixture[0:1]), sample_rate = args.sr,rescale = False)
             save_audio_file_torch(f"{save_folder}/example.wav", example_wav, sample_rate = args.sr,rescale = False)
             # save_audio_file_torch(f"{save_folder}/self.wav", torch.from_numpy(targets["self"]), sample_rate = args.sr,rescale = False)
@@ -578,7 +392,7 @@ def main(args: argparse.Namespace):
     results_df = pd.DataFrame.from_records(records)
     
     # Save DataFrame
-    results_csv_path = f'./output_rebuttal/result_{model_name}.csv' #f'./output/result_{model_name}.csv'
+    results_csv_path = f'./output/result_{model_name}.csv' #f'./output/result_{model_name}.csv'
     results_df.to_csv(results_csv_path)
 
     # Create DataFrame from records
@@ -625,10 +439,6 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Whether to use cuda')
 
-
-    parser.add_argument('--noise_dir',
-                        default=None,
-                        help='Whether to use cuda')
 
 
     main(parser.parse_args())

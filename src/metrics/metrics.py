@@ -14,8 +14,6 @@ import numpy as np
 import copy
 from src.losses.MultiResoLoss import MultiResoFuseLoss
 from src.losses.Perceptual_Loss import PLCPALoss
-from src.losses.Hubert_Loss import HubertLoss
-from src.losses.WavLM_Loss import WavLM_Loss
 
 def compute_decay(est, mix):
     """
@@ -64,12 +62,6 @@ class Metrics(nn.Module):
         elif name == 'PLCPALoss':
             plcpa = PLCPALoss(**kwargs)
             self.func = lambda est, gt, mix: plcpa(est = est, gt = gt)
-        elif name == "Hubert":
-            huber = HubertLoss(**kwargs)
-            self.func = lambda est, gt, mix: huber(est = est, gt = gt)
-        elif name == "WavLM":
-            wavlm = WavLM_Loss(**kwargs)
-            self.func = lambda est, gt, mix: wavlm(est = est, gt = gt)
         else:
             raise NotImplementedError(f"Metric {name} not implemented!")
 
