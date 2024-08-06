@@ -1,6 +1,7 @@
 # Target-Conversation-Extraction
 This is the code and dataset repo for Interspeech 2024 paper "Target conversation extraction: Source separation using turn-taking dynamics".
 Project webpage and the audio samples can be found in our [webpage](https://tce.cs.washington.edu).
+[![YouTube](http://i.ytimg.com/vi/xTwye3gqLWo/hqdefault.jpg)](https://www.youtube.com/watch?v=xTwye3gqLWo)
 
 ## Problem Definition
 This task is used to extract the conversation in noisy environment given the embedding/enrollment of one speaker in the conversation. In other word, this paper tried to solve the new problem "who talk with me?".
