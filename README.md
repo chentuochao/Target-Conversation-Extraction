@@ -35,11 +35,22 @@ python convert_AMI2Libri.py --data_dir /scr/Noreverb_ASR/ --save_dir /scr/ASR_Li
 ```
 
 ```
-# generate synthetic dataset using LibriTTS
+# generate synthetic dataset cross languages
 python convert_ASR2aishell1.py --data_dir /scr/Noreverb_ASR --save_dir /scr/ASR2AISHELL --replace_prob 0.5
 ```
+### Dataset Links
 
-The generated dataset will be soon avaliable in Zenodo....
+Synthesize dataset:
+synthetic dataset using LibriTTS: [syn_libri.tar]()
+synthetic dataset cross languages: [syn_cross.tar.gz](https://drive.google.com/file/d/1CUuM-oYXELsvzw3vKo67meKWaDxFEw2n/view?usp=sharing)
+
+Augmented dataset: 
+augmented dataset for AMI [aug_eng.tar.gz](https://drive.google.com/file/d/1ylpLe1sU-ypIIQwf4KwI72Unm89ifims/view?usp=sharing)
+augmented dataset for ASR-RAMC [aug_zh.tar.gz](https://drive.google.com/file/d/1sNYFJBtXFG_dBzfc53jAaQYZuJ1DmNdY/view?usp=sharing)
+
+Real-recorded dataset: 
+real dataset for AMI:  [real_eng.tar.gz](https://drive.google.com/file/d/1riAKTOdMQkK5cG3j9HT75Kr5paYXxQ3Z/view?usp=sharing)
+real dataset for ASR-RAMC [real_zh.tar.gz](https://drive.google.com/file/d/1lOSzjQLbg15TPYjjTtIHRjIDGgc7XYEU/view?usp=sharing)
 
 ## Model Checkpoints
 Model after pretrained stage: [Pretrain](https://drive.google.com/drive/folders/1Zyi-mYQO7yH-Di8vtkoRAjX0MGjSTKI-?usp=sharing)
