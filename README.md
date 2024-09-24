@@ -41,6 +41,16 @@ python convert_ASR2aishell1.py --data_dir /scr/Noreverb_ASR --save_dir /scr/ASR2
 
 The generated dataset will be soon avaliable in Zenodo....
 
+## Model Checkpoints
+Model after pretrained stage: [Pretrain](https://drive.google.com/drive/folders/1Zyi-mYQO7yH-Di8vtkoRAjX0MGjSTKI-?usp=sharing)
+
+Model finetune for English (AMI): [En-AMI](https://drive.google.com/drive/folders/1fJudmgKhaIFKSKafb-GPmnTLtbWMAT_3?usp=sharing)
+
+Model finetune for Mandrain (ASR-RAMC): [Mn-ASR-RAMC](https://drive.google.com/drive/folders/1Zyi-mYQO7yH-Di8vtkoRAjX0MGjSTKI-?usp=sharing)
+
+Model finetune with [Candor](https://www.science.org/doi/10.1126/sciadv.adf3197) dataset for better performance for real-world demo: [En-Candor](https://drive.google.com/drive/folders/1txtSUunwadl5JTCHlJZWXAwMxTTEI90Q?usp=sharing)
+
+
 ## Model Prepare
 <p align="center">
 <img src="image/arch.png" width="600">
