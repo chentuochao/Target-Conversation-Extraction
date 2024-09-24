@@ -41,7 +41,7 @@ python convert_ASR2aishell1.py --data_dir /scr/Noreverb_ASR --save_dir /scr/ASR2
 ### Dataset Links
 
 Synthesize dataset:
-synthetic dataset using LibriTTS: [syn_libri.tar]()
+synthetic dataset using LibriTTS: [syn_libri.tar](https://drive.google.com/file/d/1LhDvGDD3bx7W65gG6sD0Goqzk42gr77a/view?usp=sharing)
 synthetic dataset cross languages: [syn_cross.tar.gz](https://drive.google.com/file/d/1CUuM-oYXELsvzw3vKo67meKWaDxFEw2n/view?usp=sharing)
 
 Augmented dataset: 
