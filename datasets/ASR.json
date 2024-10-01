@@ -1,0 +1,16 @@
+{
+    "target_prob":{
+        "ASR": 1
+    },
+    "interference_prob":{
+        "ASR": 1
+    },
+    "ASR":{
+        "wav_folder": "/scr/MDT2021S003/WAV/",
+        "txt_folder": "/scr/MDT2021S003/TXT/",
+        "train_tsv": "/scr/DataPartition/train.tsv",
+        "val_tsv": "/scr/DataPartition/dev.tsv",
+        "test_tsv": "/scr/DataPartition/test.tsv"
+    }
+
+}

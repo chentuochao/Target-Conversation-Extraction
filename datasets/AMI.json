@@ -1,0 +1,14 @@
+{
+    "target_prob":{
+        "AMI": 1    },
+    "interference_prob":{
+        "AMI": 1
+    },
+    "AMI":{
+        "train_folder": "/gscratch/intelligentsystems/common_datasets/ami/ami-dataset/1min/train/",
+        "val_folder": "/gscratch/intelligentsystems/common_datasets/ami/ami-dataset/1min/dev/",
+        "test_folder": "/gscratch/intelligentsystems/common_datasets/ami/ami-dataset/1min/test/",
+        "clean_folder": "/gscratch/intelligentsystems/qirui/ami-datasets_clean_example_test/"
+    }
+
+}
