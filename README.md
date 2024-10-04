@@ -20,12 +20,12 @@ The real conversational datasets we used are [AMI Corpus](https://groups.inf.ed.
 
 ```
 # generate AMI dataset
-python datasets/generate_dataset.py ./datasets/AMI.json $SAVE_FOLDER --n_outputs_train 8000 --n_outputs_val 1000 --reverb 1
+python datasets/generate_dataset.py ./datasets/AMI.json $SAVE_FOLDER --n_outputs_train 8000 --n_outputs_val 1000
 ```
 
 ```
 # generate ASR-RAMC dataset
-python datasets/generate_dataset.py ./datasets/ASR.json $SAVE_FOLDER --n_outputs_train 8000 --n_outputs_val 1000 --reverb 1
+python datasets/generate_dataset.py ./datasets/ASR.json $SAVE_FOLDER --n_outputs_train 8000 --n_outputs_val 1000 
 ```
 
 ### synthesize and augment dataset
